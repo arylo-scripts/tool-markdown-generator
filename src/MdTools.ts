@@ -1,7 +1,9 @@
 const INDENT_SPACE_LENGTH = 2
 
-export function indent (level: number, content = '') {
-  return `${Array((level - 1) * INDENT_SPACE_LENGTH).fill(' ').join('')}${content}`
+export function indent(level: number, content = '') {
+  return `${Array((level - 1) * INDENT_SPACE_LENGTH)
+    .fill(' ')
+    .join('')}${content}`
 }
 
 export function enter() {
@@ -9,21 +11,24 @@ export function enter() {
 }
 
 export type HeaderLevel = 1 | 2 | 3 | 4 | 5
-const header = (level: HeaderLevel) => (text = '') => `${Array(level).fill('#').join('')} ${text}`.trim()
+const header =
+  (level: HeaderLevel) =>
+  (text = '') =>
+    `${Array(level).fill('#').join('')} ${text}`.trim()
 
-export function h1 (...args: Parameters<ReturnType<typeof header>>) {
+export function h1(...args: Parameters<ReturnType<typeof header>>) {
   return header(1)(...args)
 }
-export function h2 (...args: Parameters<ReturnType<typeof header>>) {
+export function h2(...args: Parameters<ReturnType<typeof header>>) {
   return header(2)(...args)
 }
-export function h3 (...args: Parameters<ReturnType<typeof header>>) {
+export function h3(...args: Parameters<ReturnType<typeof header>>) {
   return header(3)(...args)
 }
-export function h4 (...args: Parameters<ReturnType<typeof header>>) {
+export function h4(...args: Parameters<ReturnType<typeof header>>) {
   return header(4)(...args)
 }
-export function h5 (...args: Parameters<ReturnType<typeof header>>) {
+export function h5(...args: Parameters<ReturnType<typeof header>>) {
   return header(5)(...args)
 }
 

@@ -2,11 +2,19 @@ import * as MdTools from './MdTools'
 export { MdTools }
 
 interface LevelOptions {
-  level: number,
+  level: number
 }
 
-function getOption<O extends Record<string, any>, K extends keyof O>(options: O, key: K, defaultValue: O[K]): O[K];
-function getOption<O extends Record<string, any>, K extends keyof O>(options: O, key: K, defaultValue?: O[K]) {
+function getOption<O extends Record<string, any>, K extends keyof O>(
+  options: O,
+  key: K,
+  defaultValue: O[K],
+): O[K]
+function getOption<O extends Record<string, any>, K extends keyof O>(
+  options: O,
+  key: K,
+  defaultValue?: O[K],
+) {
   return options[key] ?? defaultValue
 }
 
@@ -20,16 +28,22 @@ type ListItemOptions = Partial<LevelOptions>
 type TaskItemOptions = Partial<LevelOptions & { selected: boolean }>
 type TableOptions = Partial<LevelOptions>
 type HyperlinkOptions = Partial<LevelOptions & { anchorKey: string }>
-type ImageOptions = Partial<LevelOptions & { anchorKey: string, alt: string }>
+type ImageOptions = Partial<LevelOptions & { anchorKey: string; alt: string }>
 
-function cloneDeep <T>(value: T): T {
+function cloneDeep<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T
 }
 
 class Template {
   protected templateContent: string
   protected anchorMap: Record<string, string> = {}
-  private headerNextUtils: { text: Template['text'], listItem: Template['listItem'], taskItem: Template['taskItem'], image: Template['image'], hyperlink: Template['hyperlink'] }
+  private headerNextUtils: {
+    text: Template['text']
+    listItem: Template['listItem']
+    taskItem: Template['taskItem']
+    image: Template['image']
+    hyperlink: Template['hyperlink']
+  }
   private contentNextUtils: Template['headerNextUtils'] & { end: Template['emptyLine'] }
   constructor(text: string) {
     this.templateContent = text
@@ -76,20 +90,31 @@ class Template {
       this.templateContent,
       this.templateContent && !/\n$/.test(this.templateContent) && MdTools.enter(),
       Object.keys(this.anchorMap).length && MdTools.enter(),
-      Object.entries(this.anchorMap).map(([key, value]) => MdTools.anchor(key, value)).join(MdTools.enter()),
+      Object.entries(this.anchorMap)
+        .map(([key, value]) => MdTools.anchor(key, value))
+        .join(MdTools.enter()),
       Object.keys(this.anchorMap).length && MdTools.enter(),
-    ].filter(Boolean).join('').replace(/\n(\s*\n){2,}/g, '\n\n')
+    ]
+      .filter(Boolean)
+      .join('')
+      .replace(/\n(\s*\n){2,}/g, '\n\n')
   }
 
   public text(content = '', opts?: TextOptions) {
-    this.templateContent += MdTools.indent(getLevelFromOptions(opts), `${MdTools.text(content)}${MdTools.enter()}`)
+    this.templateContent += MdTools.indent(
+      getLevelFromOptions(opts),
+      `${MdTools.text(content)}${MdTools.enter()}`,
+    )
     return this.contentNextUtils
   }
   public listItem(text = '', opts?: ListItemOptions) {
     return this.text(MdTools.listItem(text), { level: getLevelFromOptions(opts) })
   }
   public taskItem(text = '', opts?: TaskItemOptions) {
-    return this.listItem(MdTools.taskItem(text, { selected: getOption(opts || {}, 'selected', false) }), { level: getLevelFromOptions(opts) })
+    return this.listItem(
+      MdTools.taskItem(text, { selected: getOption(opts || {}, 'selected', false) }),
+      { level: getLevelFromOptions(opts) },
+    )
   }
   public hyperlink(text: string, link: string, opts?: HyperlinkOptions) {
     let content!: string
@@ -116,9 +141,12 @@ class Template {
   }
 
   public table(opts?: TableOptions) {
-    const tableMap: { header: { key: string, title: string }[], body: Record<string, string | number>[]} = { header: [], body: [] }
+    const tableMap: {
+      header: { key: string; title: string }[]
+      body: Record<string, string | number>[]
+    } = { header: [], body: [] }
     const actionMap = {
-      header: (row: { key: string, title: string }[]) => {
+      header: (row: { key: string; title: string }[]) => {
         row.forEach(({ key, title }) => {
           tableMap.header.push({ key, title })
         })
@@ -138,10 +166,13 @@ class Template {
         const separator = header.map(() => '|--').join('') + '|'
         this.text(separator, { level: getLevelFromOptions(opts) })
         body.forEach((row) => {
-          const content = header.map(({ key }) => `|${(row[key] ?? '').toString().replace(/\|/g, '\|')}`).join('') + '|'
+          const content =
+            header
+              .map(({ key }) => `|${(row[key] ?? '').toString().replace(/\|/g, '\|')}`)
+              .join('') + '|'
           this.text(content, { level: getLevelFromOptions(opts) })
         })
-      }
+      },
     }
     return actionMap
   }
@@ -161,11 +192,11 @@ class Template {
   }
 }
 
-export const genTemplate = (callback: (utils: Template) => any = (() => { })) => {
+export const genTemplate = (callback: (utils: Template) => any = () => {}) => {
   return readTemplate('', callback)
 }
 
-export const readTemplate = (text: string, callback: (utils: Template) => any = (() => { })) => {
+export const readTemplate = (text: string, callback: (utils: Template) => any = () => {}) => {
   const templateInst = new Template(cloneDeep(text))
   callback(templateInst)
   return templateInst[Symbol.toStringTag]()

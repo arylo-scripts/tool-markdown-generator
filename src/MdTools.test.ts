@@ -45,12 +45,19 @@ describe('Markdown Tools', () => {
     test('Exist content', () => expect(mdTools.text('text')).toMatchSnapshot())
   })
 
-  test(mdTools.anchor.name, () => expect(mdTools.anchor('key', 'https://example.com/pathname')).toMatchSnapshot())
-  test(mdTools.hyperlink.name, () => expect(mdTools.hyperlink('label', 'https://example.com/pathname')).toMatchSnapshot())
-  test(mdTools.hyperlinkWithKey.name, () => expect(mdTools.hyperlinkWithKey('label', 'key')).toMatchSnapshot())
+  test(mdTools.anchor.name, () =>
+    expect(mdTools.anchor('key', 'https://example.com/pathname')).toMatchSnapshot(),
+  )
+  test(mdTools.hyperlink.name, () =>
+    expect(mdTools.hyperlink('label', 'https://example.com/pathname')).toMatchSnapshot(),
+  )
+  test(mdTools.hyperlinkWithKey.name, () =>
+    expect(mdTools.hyperlinkWithKey('label', 'key')).toMatchSnapshot(),
+  )
   describe(mdTools.image.name, () => {
     test('No alt', () => expect(mdTools.image('https://example.com/pathname')).toMatchSnapshot())
-    test('Exist alt', () => expect(mdTools.image('https://example.com/pathname', 'alt')).toMatchSnapshot())
+    test('Exist alt', () =>
+      expect(mdTools.image('https://example.com/pathname', 'alt')).toMatchSnapshot())
   })
   describe(mdTools.imageByKey.name, () => {
     test('No alt', () => expect(mdTools.imageByKey('key')).toMatchSnapshot())
@@ -63,11 +70,16 @@ describe('Markdown Tools', () => {
   describe(mdTools.taskItem.name, () => {
     test('No content', () => expect(mdTools.taskItem('')).toMatchSnapshot())
     test('Exist content', () => expect(mdTools.taskItem('Text')).toMatchSnapshot())
-    test('No content with empty options', () => expect(mdTools.taskItem('', { })).toMatchSnapshot())
-    test('Exist content with empty options', () => expect(mdTools.taskItem('Text', { })).toMatchSnapshot())
-    test('No content and unselect', () => expect(mdTools.taskItem('', { selected: false })).toMatchSnapshot())
-    test('Exist content and unselect', () => expect(mdTools.taskItem('Text', { selected: false })).toMatchSnapshot())
-    test('No content and selected', () => expect(mdTools.taskItem('', { selected: true })).toMatchSnapshot())
-    test('Exist content and selected', () => expect(mdTools.taskItem('Text', { selected: true })).toMatchSnapshot())
+    test('No content with empty options', () => expect(mdTools.taskItem('', {})).toMatchSnapshot())
+    test('Exist content with empty options', () =>
+      expect(mdTools.taskItem('Text', {})).toMatchSnapshot())
+    test('No content and unselect', () =>
+      expect(mdTools.taskItem('', { selected: false })).toMatchSnapshot())
+    test('Exist content and unselect', () =>
+      expect(mdTools.taskItem('Text', { selected: false })).toMatchSnapshot())
+    test('No content and selected', () =>
+      expect(mdTools.taskItem('', { selected: true })).toMatchSnapshot())
+    test('Exist content and selected', () =>
+      expect(mdTools.taskItem('Text', { selected: true })).toMatchSnapshot())
   })
 })

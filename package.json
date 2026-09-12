@@ -1,21 +1,25 @@
 {
-  "name": "@scripts/md-generator",
+  "name": "@arylo-scripts/tool-markdown-generator",
   "version": "1.0.0",
-  "private": true,
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "description": "Composable helpers for generating Markdown documents.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./dist/index.js",
       "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
+    "prepare": "npm run build",
     "lint": "concurrently -m 1 --timings npm:lint:*",
     "lint:type-check": "tsc -p tsconfig.json --noEmit",
     "lint:formatter": "oxfmt --check",
@@ -23,7 +27,20 @@
     "fix:formatter": "oxfmt",
     "test": "vitest run src"
   },
+  "engines": {
+    "node": "24.12.0"
+  },
+  "packageManager": "npm@11.6.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arylo-scripts/tool-markdown-generator.git"
+  },
+  "homepage": "https://github.com/arylo-scripts/tool-markdown-generator#readme",
+  "bugs": {
+    "url": "https://github.com/arylo-scripts/tool-markdown-generator/issues"
+  },
   "devDependencies": {
+    "@arylo-scripts/tsconfig": "github:arylo-scripts/tsconfig#master",
     "concurrently": "^8.2.2",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.58.0",

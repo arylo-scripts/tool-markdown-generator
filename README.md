@@ -5,20 +5,33 @@ Composable helpers for generating Markdown documents.
 ## Install
 
 ```sh
-npm install github:arylo-scripts/tool-markdown-generator
+npm install @arylo-scripts/tool-markdown-generator
 ```
 
 ## Usage
 
 ```ts
-import { genTemplate } from '@arylo-scripts/tool-markdown-generator'
+import { MdTools, genTemplate, readTemplate } from '@arylo-scripts/tool-markdown-generator'
 
 const markdown = genTemplate((utils) => {
-  utils.h1('Title')
-  utils.listItem('First item')
-  utils.listItem('Second item')
+  utils.h1('Title').listItem('First item').taskItem('Second item', { selected: true })
 })
+
+const nested = readTemplate(markdown, (utils) => {
+  utils.h2('Links').hyperlink('Example', 'https://example.com')
+})
+
+const heading = MdTools.h1('Standalone heading')
 ```
+
+Use `genTemplate` and `readTemplate` for fluent document construction, or
+`MdTools` for individual Markdown primitives.
+
+## API
+
+- `genTemplate(callback?)`
+- `readTemplate(text, callback?)`
+- `MdTools`
 
 ## Development
 
